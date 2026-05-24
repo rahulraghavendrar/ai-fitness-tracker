@@ -1,9 +1,16 @@
-import { useState } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+} from "react";
 
 import { motion } from "framer-motion";
 
+import toast from "react-hot-toast";
+
 import QuickActions from "./QuickActions";
 import MessageBubble from "./MessageBubble";
+import TypingIndicator from "./TypingIndicator";
 
 function ChatWindow() {
 
@@ -16,6 +23,42 @@ function ChatWindow() {
 
   const [input, setInput] = useState("");
 
+  const [loading, setLoading] =
+    useState(false);
+
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages, loading]);
+
+  const fakeAIResponse = (message) => {
+
+    setLoading(true);
+
+    setTimeout(() => {
+
+      const aiMessage = {
+        sender: "ai",
+        text: `Tracked successfully ✅ "${message}" added to your calories.`,
+      };
+
+      setMessages((prev) => [
+        ...prev,
+        aiMessage,
+      ]);
+
+      setLoading(false);
+
+      toast.success(
+        "Meal tracked successfully!"
+      );
+
+    }, 1500);
+  };
+
   const sendMessage = () => {
 
     if (!input.trim()) return;
@@ -25,18 +68,31 @@ function ChatWindow() {
       text: input,
     };
 
-    const aiMessage = {
-      sender: "ai",
-      text: "Meal tracked successfully ✅",
-    };
-
-    setMessages([
-      ...messages,
+    setMessages((prev) => [
+      ...prev,
       userMessage,
-      aiMessage,
     ]);
 
+    fakeAIResponse(input);
+
     setInput("");
+  };
+
+  const handleQuickAction = (
+    action
+  ) => {
+
+    const userMessage = {
+      sender: "user",
+      text: action,
+    };
+
+    setMessages((prev) => [
+      ...prev,
+      userMessage,
+    ]);
+
+    fakeAIResponse(action);
   };
 
   return (
@@ -62,7 +118,17 @@ function ChatWindow() {
           />
         ))}
 
-        <QuickActions />
+        <QuickActions
+          onActionClick={
+            handleQuickAction
+          }
+        />
+
+        {loading && (
+          <TypingIndicator />
+        )}
+
+        <div ref={bottomRef} />
 
       </div>
 
@@ -74,6 +140,11 @@ function ChatWindow() {
           onChange={(e) =>
             setInput(e.target.value)
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              sendMessage();
+            }
+          }}
           placeholder="Track your meal..."
           className="flex-1 bg-black/30 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-orange-500 transition-all"
         />
@@ -82,8 +153,11 @@ function ChatWindow() {
           whileTap={{
             scale: 0.95,
           }}
+          whileHover={{
+            scale: 1.03,
+          }}
           onClick={sendMessage}
-          className="bg-white text-black px-8 rounded-2xl font-semibold hover:scale-105 transition-all"
+          className="bg-white text-black px-8 rounded-2xl font-semibold transition-all"
         >
           Send
         </motion.button>

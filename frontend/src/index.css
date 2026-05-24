@@ -9,12 +9,19 @@ body,
   padding: 0;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   background: #090909;
   color: white;
   font-family: Inter, sans-serif;
   overflow-x: hidden;
+  position: relative;
 }
+
+/* SCROLLBAR */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -23,4 +30,78 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #333;
   border-radius: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* PREMIUM GLOW EFFECTS */
+
+body::before {
+  content: "";
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 115, 0, 0.15);
+  filter: blur(120px);
+  top: -100px;
+  right: -100px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: rgba(0, 153, 255, 0.12);
+  filter: blur(120px);
+  bottom: -100px;
+  left: -100px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* INPUT AUTOFILL FIX */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* SMOOTH TRANSITIONS */
+
+button,
+input,
+div {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* GLASS EFFECT */
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ANIMATED GRADIENT */
+
+.gradient-text {
+  background: linear-gradient(
+    to right,
+    #ff7b00,
+    #ff3c00,
+    #ff00aa
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
