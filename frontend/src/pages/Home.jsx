@@ -1,7 +1,7 @@
 import Sidebar from "../components/layout/Sidebar";
 import Topbar from "../components/layout/Topbar";
 import ChatWindow from "../components/chat/ChatWindow";
-import StatsGrid from "../components/dashboard/StatsGrid";
+import DashboardGrid from "../components/dashboard/DashboardGrid";
 
 function Home() {
   return (
@@ -13,15 +13,11 @@ function Home() {
 
         <Topbar />
 
-        <div className="grid grid-cols-[1fr_350px] gap-8">
+        <div className="grid grid-cols-[1fr_420px] gap-8">
 
           <ChatWindow />
 
-          <div>
-
-            <StatsGrid />
-
-          </div>
+          <DashboardGrid />
 
         </div>
 
