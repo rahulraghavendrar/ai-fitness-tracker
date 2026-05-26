@@ -11,6 +11,10 @@ import App from "./App";
 
 import "./index.css";
 
+import {
+  AuthProvider,
+} from "./context/AuthContext";
+
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
@@ -18,12 +22,16 @@ ReactDOM.createRoot(
 
     <BrowserRouter>
 
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
+      <AuthProvider>
 
-      <App />
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+        />
+
+        <App />
+
+      </AuthProvider>
 
     </BrowserRouter>
 
