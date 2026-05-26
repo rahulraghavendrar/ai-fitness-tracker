@@ -9,33 +9,51 @@ import Progress from "./pages/Progress";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+
 function App() {
   return (
     <Routes>
 
       <Route
+        path="/login"
+        element={<Login />}
+      />
+
+      <Route
         path="/"
-        element={<Home />}
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/workout"
-        element={<Workout />}
+        element={
+          <ProtectedRoute>
+            <Workout />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/progress"
-        element={<Progress />}
+        element={
+          <ProtectedRoute>
+            <Progress />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/profile"
-        element={<Profile />}
-      />
-
-      <Route
-        path="/login"
-        element={<Login />}
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
       />
 
     </Routes>
