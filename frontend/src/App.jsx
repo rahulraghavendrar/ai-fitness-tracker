@@ -8,6 +8,7 @@ import Workout from "./pages/Workout";
 import Progress from "./pages/Progress";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
+import Onboarding from "./pages/Onboarding";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -15,10 +16,25 @@ function App() {
   return (
     <Routes>
 
+      {/* AUTH */}
+
       <Route
         path="/login"
         element={<Login />}
       />
+
+      {/* ONBOARDING */}
+
+      <Route
+        path="/onboarding"
+        element={
+          <ProtectedRoute>
+            <Onboarding />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* DASHBOARD */}
 
       <Route
         path="/"
@@ -29,6 +45,8 @@ function App() {
         }
       />
 
+      {/* WORKOUT */}
+
       <Route
         path="/workout"
         element={
@@ -38,6 +56,8 @@ function App() {
         }
       />
 
+      {/* PROGRESS */}
+
       <Route
         path="/progress"
         element={
@@ -46,6 +66,8 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      {/* PROFILE */}
 
       <Route
         path="/profile"
