@@ -1,5 +1,11 @@
 import PageWrapper from "../components/ui/PageWrapper";
 
+import Navbar from "../components/layout/Navbar";
+
+import {
+  useProfile,
+} from "../hooks/useProfile";
+
 import {
   LineChart,
   Line,
@@ -10,22 +16,17 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const data = [
-  { week: "Week 1", weight: 82 },
-  { week: "Week 2", weight: 81 },
-  { week: "Week 3", weight: 80 },
-  { week: "Week 4", weight: 78 },
-];
-
 function CustomTooltip({
   active,
   payload,
 }) {
+
   if (
     active &&
     payload &&
     payload.length
   ) {
+
     return (
       <div className="bg-[#111]/95 border border-orange-500/20 backdrop-blur-xl px-5 py-4 rounded-2xl shadow-2xl">
 
@@ -45,18 +46,50 @@ function CustomTooltip({
 }
 
 function Progress() {
+
+  const {
+    profile,
+    loading,
+  } = useProfile();
+
+  if (loading) {
+
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center text-white text-3xl">
+        Loading...
+      </div>
+    );
+  }
+
+  const data = [
+    {
+      week: "Week 1",
+      weight:
+        profile.weight + 4,
+    },
+    {
+      week: "Week 2",
+      weight:
+        profile.weight + 2,
+    },
+    {
+      week: "Week 3",
+      weight:
+        profile.weight + 1,
+    },
+    {
+      week: "Current",
+      weight:
+        profile.weight,
+    },
+  ];
+
   return (
     <PageWrapper>
 
       <div className="min-h-screen bg-[#090909] text-white p-8">
 
-        <h1 className="text-5xl font-bold mb-3">
-          Progress Analytics
-        </h1>
-
-        <p className="text-gray-400 mb-10 text-lg">
-          Track your transformation journey
-        </p>
+        <Navbar title="Progress Analytics" />
 
         <div className="grid grid-cols-3 gap-6 mb-8">
 
@@ -67,7 +100,7 @@ function Progress() {
             </p>
 
             <h2 className="text-5xl font-bold mt-4">
-              78kg
+              {profile.weight}kg
             </h2>
 
           </div>
@@ -75,11 +108,11 @@ function Progress() {
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
 
             <p className="text-gray-400">
-              Calories Burned
+              Daily Calories
             </p>
 
             <h2 className="text-5xl font-bold mt-4">
-              12,540
+              {profile.daily_calories}
             </h2>
 
           </div>
@@ -87,11 +120,11 @@ function Progress() {
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
 
             <p className="text-gray-400">
-              Workout Streak
+              Protein Goal
             </p>
 
             <h2 className="text-5xl font-bold mt-4">
-              18 Days
+              {profile.protein_goal}g
             </h2>
 
           </div>
@@ -115,7 +148,7 @@ function Progress() {
             </div>
 
             <div className="bg-orange-500/10 text-orange-400 px-4 py-2 rounded-xl text-sm">
-              Last 30 Days
+              Personalized Analytics
             </div>
 
           </div>
