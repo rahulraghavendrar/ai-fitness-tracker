@@ -1,14 +1,32 @@
 import PageWrapper from "../components/ui/PageWrapper";
 
+import Navbar from "../components/layout/Navbar";
+
+import {
+  useProfile,
+} from "../hooks/useProfile";
+
 function Profile() {
+
+  const {
+    profile,
+    loading,
+  } = useProfile();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center text-white text-3xl">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <PageWrapper>
 
       <div className="min-h-screen bg-[#090909] text-white p-8">
 
-        <h1 className="text-5xl font-bold mb-10">
-          Profile
-        </h1>
+        <Navbar title="Profile" />
 
         <div className="grid grid-cols-[350px_1fr] gap-8">
 
@@ -19,7 +37,7 @@ function Profile() {
               <div className="w-[120px] h-[120px] rounded-full bg-gradient-to-br from-orange-500 to-pink-500 mb-6" />
 
               <h2 className="text-3xl font-bold">
-                Rahul
+                {profile.full_name}
               </h2>
 
               <p className="text-gray-400 mt-2">
@@ -35,8 +53,11 @@ function Profile() {
                   Goal
                 </p>
 
-                <h3 className="text-xl mt-2">
-                  Fat Loss
+                <h3 className="text-xl mt-2 capitalize">
+                  {profile.fitness_goal.replace(
+                    "_",
+                    " "
+                  )}
                 </h3>
               </div>
 
@@ -46,17 +67,7 @@ function Profile() {
                 </p>
 
                 <h3 className="text-xl mt-2">
-                  2200 kcal
-                </h3>
-              </div>
-
-              <div>
-                <p className="text-gray-400">
-                  Workout Split
-                </p>
-
-                <h3 className="text-xl mt-2">
-                  Push Pull Legs
+                  {profile.daily_calories} kcal
                 </h3>
               </div>
 
@@ -80,7 +91,7 @@ function Profile() {
                   </p>
 
                   <h3 className="text-4xl font-bold mt-3">
-                    178 cm
+                    {profile.height} cm
                   </h3>
                 </div>
 
@@ -90,7 +101,7 @@ function Profile() {
                   </p>
 
                   <h3 className="text-4xl font-bold mt-3">
-                    78 kg
+                    {profile.weight} kg
                   </h3>
                 </div>
 
@@ -100,17 +111,17 @@ function Profile() {
                   </p>
 
                   <h3 className="text-4xl font-bold mt-3">
-                    18%
+                    {profile.body_fat}%
                   </h3>
                 </div>
 
                 <div className="bg-black/20 rounded-2xl p-6">
                   <p className="text-gray-400">
-                    BMI
+                    Goal Weight
                   </p>
 
                   <h3 className="text-4xl font-bold mt-3">
-                    24.6
+                    {profile.goal_weight} kg
                   </h3>
                 </div>
 
