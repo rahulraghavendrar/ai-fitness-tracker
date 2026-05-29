@@ -4,10 +4,13 @@ dist
 
 # Environment Variables
 .env
+ai-service/.env
 
 # Python
-venv
-__pycache__
+venv/
+ai-service/venv/
+__pycache__/
+*.pyc
 
 # VS Code
 .vscode
