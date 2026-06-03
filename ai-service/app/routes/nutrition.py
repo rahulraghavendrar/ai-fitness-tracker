@@ -5,10 +5,20 @@ from app.services.nutrition_service import (
     analyze_meal,
 )
 
-from app.models.nutrition_models import (
-    MealAnalysisRequest,
+from app.services.meal_service import (
+    save_meal
 )
 
+from app.services.analytics_service import (
+    get_daily_summary
+)
+
+from app.models.nutrition_models import (
+    MealAnalysisRequest,
+    LogMealRequest,
+)
+
+router = APIRouter()
 router = APIRouter()
 
 
@@ -48,3 +58,64 @@ async def nutrition_analyze(
         }
 
     return result
+
+@router.post("/log-meal")
+async def log_meal(
+    request: LogMealRequest
+):
+
+    result = analyze_meal(
+        request.meal
+    )
+
+    if result is None:
+
+        return {
+            "message":
+            "Food not found"
+        }
+
+    meal_data = {
+
+        "user_id":
+            request.user_id,
+
+        "food_name":
+            result["food_name"],
+
+        "quantity":
+            result["quantity"],
+
+        "calories":
+            result["total_calories"],
+
+        "protein":
+            result["protein"],
+
+        "carbs":
+            result["carbs"],
+
+        "fat":
+            result["fat"]
+    }
+
+    save_meal(
+        meal_data
+    )
+
+    return {
+        "message":
+        "Meal logged successfully",
+
+        "meal":
+        meal_data
+    }
+
+@router.get("/daily-summary")
+async def daily_summary(
+    user_id: str
+):
+
+    return get_daily_summary(
+        user_id
+    )
