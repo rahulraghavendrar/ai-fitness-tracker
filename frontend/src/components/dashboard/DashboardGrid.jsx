@@ -3,13 +3,28 @@ import WeeklyChart from "./WeeklyChart";
 import WorkoutCard from "./WorkoutCard";
 import HydrationCard from "./HydrationCard";
 
+import NutritionSummaryCard from "./NutritionSummaryCard";
+
+import MealLogger from "../nutrition/MealLogger";
+
 function DashboardGrid() {
+
   return (
-    <div className="grid grid-cols-2 gap-6 mt-8">
+
+    <div className="
+      grid
+      grid-cols-2
+      gap-6
+      mt-8
+    ">
 
       <ProgressRing />
 
       <WorkoutCard />
+
+      <NutritionSummaryCard />
+
+      <MealLogger />
 
       <div className="col-span-2">
         <WeeklyChart />
@@ -18,6 +33,7 @@ function DashboardGrid() {
       <HydrationCard />
 
     </div>
+
   );
 }
 
