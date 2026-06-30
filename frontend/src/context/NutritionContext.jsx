@@ -13,20 +13,29 @@ const NutritionContext =
   createContext();
 
 export function NutritionProvider({
+
   children,
+
 }) {
 
   const [
+
     summary,
+
     setSummary,
+
   ] = useState(null);
 
   const [
+
     loading,
+
     setLoading,
+
   ] = useState(true);
 
-  const userId = "test-user";
+  const userId =
+    "test-user";
 
   async function refreshNutrition() {
 
@@ -39,12 +48,13 @@ export function NutritionProvider({
           userId
         );
 
-      setSummary(data);
+      setSummary(
+        data
+      );
 
     } catch (error) {
 
       console.error(
-        "Nutrition Error:",
         error
       );
 
@@ -62,28 +72,91 @@ export function NutritionProvider({
 
   }, []);
 
+  useEffect(() => {
+
+    function scheduleRefresh() {
+
+      const now =
+        new Date();
+
+      const midnight =
+        new Date();
+
+      midnight.setHours(
+        24,
+        0,
+        0,
+        0
+      );
+
+      const milliseconds =
+
+        midnight - now;
+
+      const timer =
+
+        setTimeout(
+          async () => {
+
+            await refreshNutrition();
+
+            scheduleRefresh();
+
+          },
+          milliseconds
+        );
+
+      return timer;
+
+    }
+
+    const timer =
+      scheduleRefresh();
+
+    return () =>
+
+      clearTimeout(
+        timer
+      );
+
+  }, []);
+
   return (
 
     <NutritionContext.Provider
+
       value={{
+
         summary,
+
         loading,
+
         refreshNutrition,
+
         userId,
+
       }}
+
     >
 
-      {children}
+      {
+
+        children
+
+      }
 
     </NutritionContext.Provider>
 
   );
+
 }
 
 export function useNutrition() {
 
   return useContext(
+
     NutritionContext
+
   );
 
 }
