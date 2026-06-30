@@ -1,10 +1,11 @@
 import PageWrapper from "../components/ui/PageWrapper";
-
 import Navbar from "../components/layout/Navbar";
 
 import {
   useProfile,
 } from "../hooks/useProfile";
+
+import useNutritionSummary from "../hooks/useNutritionSummary";
 
 import {
   LineChart,
@@ -28,6 +29,7 @@ function CustomTooltip({
   ) {
 
     return (
+
       <div className="bg-[#111]/95 border border-orange-500/20 backdrop-blur-xl px-5 py-4 rounded-2xl shadow-2xl">
 
         <p className="text-gray-400 text-sm mb-2">
@@ -39,10 +41,13 @@ function CustomTooltip({
         </p>
 
       </div>
+
     );
+
   }
 
   return null;
+
 }
 
 function Progress() {
@@ -52,79 +57,130 @@ function Progress() {
     loading,
   } = useProfile();
 
+  const {
+    summary,
+  } = useNutritionSummary();
+
   if (loading) {
 
     return (
+
       <div className="min-h-screen bg-black flex items-center justify-center text-white text-3xl">
+
         Loading...
+
       </div>
+
     );
+
   }
 
+  const calorieGoal =
+    profile.daily_calories || 2200;
+
+  const calorieProgress =
+    Math.min(
+      100,
+      Math.round(
+        ((summary?.calories || 0) /
+          calorieGoal) * 100
+      )
+    );
+
   const data = [
+
     {
       week: "Week 1",
       weight:
         profile.weight + 4,
     },
+
     {
       week: "Week 2",
       weight:
         profile.weight + 2,
     },
+
     {
       week: "Week 3",
       weight:
         profile.weight + 1,
     },
+
     {
       week: "Current",
       weight:
         profile.weight,
     },
+
   ];
 
   return (
+
     <PageWrapper>
 
       <div className="min-h-screen bg-[#090909] text-white p-8">
 
         <Navbar title="Progress Analytics" />
 
-        <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-5 gap-5 mb-8">
 
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
 
             <p className="text-gray-400">
-              Current Weight
+              Calories
             </p>
 
-            <h2 className="text-5xl font-bold mt-4">
-              {profile.weight}kg
+            <h2 className="text-4xl font-bold mt-4">
+              {summary?.calories ?? 0}
             </h2>
 
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
 
             <p className="text-gray-400">
-              Daily Calories
+              Protein
             </p>
 
-            <h2 className="text-5xl font-bold mt-4">
-              {profile.daily_calories}
+            <h2 className="text-4xl font-bold mt-4">
+              {summary?.protein ?? 0}g
             </h2>
 
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-xl">
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
 
             <p className="text-gray-400">
-              Protein Goal
+              Carbs
             </p>
 
-            <h2 className="text-5xl font-bold mt-4">
-              {profile.protein_goal}g
+            <h2 className="text-4xl font-bold mt-4">
+              {summary?.carbs ?? 0}g
+            </h2>
+
+          </div>
+
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
+
+            <p className="text-gray-400">
+              Fat
+            </p>
+
+            <h2 className="text-4xl font-bold mt-4">
+              {summary?.fat ?? 0}g
+            </h2>
+
+          </div>
+
+          <div className="bg-gradient-to-br from-orange-500 to-pink-500 rounded-3xl p-6">
+
+            <p className="text-white/80">
+              Goal
+            </p>
+
+            <h2 className="text-4xl font-bold mt-4">
+              {calorieProgress}%
             </h2>
 
           </div>
@@ -138,17 +194,17 @@ function Progress() {
             <div>
 
               <h2 className="text-3xl font-semibold">
+
                 Weight Progress
+
               </h2>
 
               <p className="text-gray-400 mt-2">
-                Monthly body weight tracking
+
+                Monthly Body Weight
+
               </p>
 
-            </div>
-
-            <div className="bg-orange-500/10 text-orange-400 px-4 py-2 rounded-xl text-sm">
-              Personalized Analytics
             </div>
 
           </div>
@@ -160,37 +216,7 @@ function Progress() {
 
             <LineChart
               data={data}
-              margin={{
-                top: 20,
-                right: 20,
-                left: -20,
-                bottom: 10,
-              }}
             >
-
-              <defs>
-
-                <linearGradient
-                  id="weightGradient"
-                  x1="0"
-                  y1="0"
-                  x2="1"
-                  y2="0"
-                >
-
-                  <stop
-                    offset="0%"
-                    stopColor="#ff7b00"
-                  />
-
-                  <stop
-                    offset="100%"
-                    stopColor="#ff006e"
-                  />
-
-                </linearGradient>
-
-              </defs>
 
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -199,49 +225,19 @@ function Progress() {
 
               <XAxis
                 dataKey="week"
-                tick={{
-                  fill: "#888",
-                  fontSize: 14,
-                  fontWeight: 500,
-                }}
-                axisLine={false}
-                tickLine={false}
               />
 
-              <YAxis
-                tick={{
-                  fill: "#666",
-                  fontSize: 13,
-                }}
-                axisLine={false}
-                tickLine={false}
-              />
+              <YAxis />
 
               <Tooltip
                 content={<CustomTooltip />}
-                cursor={{
-                  stroke: "#ff7b00",
-                  strokeWidth: 1,
-                }}
               />
 
               <Line
                 type="monotone"
                 dataKey="weight"
-                stroke="url(#weightGradient)"
-                strokeWidth={5}
-                dot={{
-                  r: 6,
-                  strokeWidth: 3,
-                  fill: "#090909",
-                  stroke: "#ff7b00",
-                }}
-                activeDot={{
-                  r: 9,
-                  fill: "#ff7b00",
-                  stroke: "#fff",
-                  strokeWidth: 2,
-                }}
+                stroke="#ff7b00"
+                strokeWidth={4}
               />
 
             </LineChart>
@@ -253,7 +249,9 @@ function Progress() {
       </div>
 
     </PageWrapper>
+
   );
+
 }
 
 export default Progress;

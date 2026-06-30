@@ -6,12 +6,18 @@ import {
   useProfile,
 } from "../hooks/useProfile";
 
+import useNutritionSummary from "../hooks/useNutritionSummary";
+
 function Profile() {
 
   const {
     profile,
     loading,
   } = useProfile();
+
+  const {
+    summary,
+  } = useNutritionSummary();
 
   if (loading) {
     return (
@@ -49,6 +55,7 @@ function Profile() {
             <div className="mt-10 space-y-5">
 
               <div>
+
                 <p className="text-gray-400">
                   Goal
                 </p>
@@ -59,16 +66,19 @@ function Profile() {
                     " "
                   )}
                 </h3>
+
               </div>
 
               <div>
+
                 <p className="text-gray-400">
-                  Daily Calories
+                  Daily Calorie Goal
                 </p>
 
                 <h3 className="text-xl mt-2">
                   {profile.daily_calories} kcal
                 </h3>
+
               </div>
 
             </div>
@@ -86,6 +96,7 @@ function Profile() {
               <div className="grid grid-cols-2 gap-6">
 
                 <div className="bg-black/20 rounded-2xl p-6">
+
                   <p className="text-gray-400">
                     Height
                   </p>
@@ -93,9 +104,11 @@ function Profile() {
                   <h3 className="text-4xl font-bold mt-3">
                     {profile.height} cm
                   </h3>
+
                 </div>
 
                 <div className="bg-black/20 rounded-2xl p-6">
+
                   <p className="text-gray-400">
                     Weight
                   </p>
@@ -103,9 +116,11 @@ function Profile() {
                   <h3 className="text-4xl font-bold mt-3">
                     {profile.weight} kg
                   </h3>
+
                 </div>
 
                 <div className="bg-black/20 rounded-2xl p-6">
+
                   <p className="text-gray-400">
                     Body Fat
                   </p>
@@ -113,9 +128,11 @@ function Profile() {
                   <h3 className="text-4xl font-bold mt-3">
                     {profile.body_fat}%
                   </h3>
+
                 </div>
 
                 <div className="bg-black/20 rounded-2xl p-6">
+
                   <p className="text-gray-400">
                     Goal Weight
                   </p>
@@ -123,6 +140,100 @@ function Profile() {
                   <h3 className="text-4xl font-bold mt-3">
                     {profile.goal_weight} kg
                   </h3>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
+
+              <h2 className="text-3xl font-semibold mb-8">
+                Nutrition Statistics
+              </h2>
+
+              <div className="grid grid-cols-2 gap-6">
+
+                <div className="bg-black/20 rounded-2xl p-6">
+
+                  <p className="text-gray-400">
+                    Calories Consumed
+                  </p>
+
+                  <h3 className="text-4xl font-bold mt-3">
+                    {summary?.calories ?? 0}
+                  </h3>
+
+                </div>
+
+                <div className="bg-black/20 rounded-2xl p-6">
+
+                  <p className="text-gray-400">
+                    Meals Logged
+                  </p>
+
+                  <h3 className="text-4xl font-bold mt-3">
+                    {summary?.meal_count ?? 0}
+                  </h3>
+
+                </div>
+
+                <div className="bg-black/20 rounded-2xl p-6">
+
+                  <p className="text-gray-400">
+                    Protein
+                  </p>
+
+                  <h3 className="text-4xl font-bold mt-3">
+                    {summary?.protein ?? 0} g
+                  </h3>
+
+                </div>
+
+                <div className="bg-black/20 rounded-2xl p-6">
+
+                  <p className="text-gray-400">
+                    Carbohydrates
+                  </p>
+
+                  <h3 className="text-4xl font-bold mt-3">
+                    {summary?.carbs ?? 0} g
+                  </h3>
+
+                </div>
+
+                <div className="bg-black/20 rounded-2xl p-6">
+
+                  <p className="text-gray-400">
+                    Fat
+                  </p>
+
+                  <h3 className="text-4xl font-bold mt-3">
+                    {summary?.fat ?? 0} g
+                  </h3>
+
+                </div>
+
+                <div className="bg-black/20 rounded-2xl p-6">
+
+                  <p className="text-gray-400">
+                    Calorie Goal Completion
+                  </p>
+
+                  <h3 className="text-4xl font-bold mt-3">
+
+                    {Math.min(
+                      100,
+                      Math.round(
+                        ((summary?.calories ?? 0) /
+                          profile.daily_calories) *
+                          100
+                      )
+                    )}%
+
+                  </h3>
+
                 </div>
 
               </div>
