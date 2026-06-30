@@ -1,4 +1,9 @@
 import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
   LineChart,
   Line,
   XAxis,
@@ -8,26 +13,23 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const data = [
-  { day: "Mon", calories: 1800 },
-  { day: "Tue", calories: 2100 },
-  { day: "Wed", calories: 1900 },
-  { day: "Thu", calories: 2300 },
-  { day: "Fri", calories: 2000 },
-  { day: "Sat", calories: 1700 },
-  { day: "Sun", calories: 2200 },
-];
+import {
+  getWeeklySummary,
+} from "../../api/nutritionApi";
 
 function CustomTooltip({
   active,
   payload,
 }) {
+
   if (
     active &&
     payload &&
     payload.length
   ) {
+
     return (
+
       <div className="bg-[#111]/95 border border-orange-500/20 backdrop-blur-xl px-5 py-4 rounded-2xl shadow-2xl">
 
         <p className="text-gray-400 text-sm mb-2">
@@ -39,6 +41,7 @@ function CustomTooltip({
         </p>
 
       </div>
+
     );
   }
 
@@ -46,7 +49,43 @@ function CustomTooltip({
 }
 
 function WeeklyChart() {
+
+  const [
+    data,
+    setData,
+  ] = useState([]);
+
+  useEffect(() => {
+
+    async function loadChart() {
+
+      try {
+
+        const result =
+          await getWeeklySummary(
+            "test-user"
+          );
+
+        setData(
+          result
+        );
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+      }
+
+    }
+
+    loadChart();
+
+  }, []);
+
   return (
+
     <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
 
       <div className="flex justify-between items-center mb-8">
@@ -117,30 +156,23 @@ function WeeklyChart() {
 
             <XAxis
               dataKey="day"
-              tick={{
-                fill: "#888",
-                fontSize: 14,
-                fontWeight: 500,
-              }}
               axisLine={false}
               tickLine={false}
+              tick={{
+                fill: "#888",
+              }}
             />
 
             <YAxis
-              tick={{
-                fill: "#666",
-                fontSize: 13,
-              }}
               axisLine={false}
               tickLine={false}
+              tick={{
+                fill: "#666",
+              }}
             />
 
             <Tooltip
               content={<CustomTooltip />}
-              cursor={{
-                stroke: "#ff7b00",
-                strokeWidth: 1,
-              }}
             />
 
             <Line
@@ -169,6 +201,7 @@ function WeeklyChart() {
       </div>
 
     </div>
+
   );
 }
 

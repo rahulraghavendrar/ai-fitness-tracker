@@ -10,7 +10,8 @@ from app.services.meal_service import (
 )
 
 from app.services.analytics_service import (
-    get_daily_summary
+    get_daily_summary,
+    get_weekly_summary,
 )
 
 from app.models.nutrition_models import (
@@ -18,7 +19,6 @@ from app.models.nutrition_models import (
     LogMealRequest,
 )
 
-router = APIRouter()
 router = APIRouter()
 
 
@@ -58,6 +58,7 @@ async def nutrition_analyze(
         }
 
     return result
+
 
 @router.post("/log-meal")
 async def log_meal(
@@ -104,12 +105,15 @@ async def log_meal(
     )
 
     return {
+
         "message":
-        "Meal logged successfully",
+            "Meal logged successfully",
 
         "meal":
-        meal_data
+            meal_data
+
     }
+
 
 @router.get("/daily-summary")
 async def daily_summary(
@@ -117,5 +121,15 @@ async def daily_summary(
 ):
 
     return get_daily_summary(
+        user_id
+    )
+
+
+@router.get("/weekly-summary")
+async def weekly_summary(
+    user_id: str
+):
+
+    return get_weekly_summary(
         user_id
     )
