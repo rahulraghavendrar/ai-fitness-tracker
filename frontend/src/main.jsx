@@ -15,6 +15,10 @@ import {
   AuthProvider,
 } from "./context/AuthContext";
 
+import {
+  NutritionProvider,
+} from "./context/NutritionContext";
+
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
@@ -24,12 +28,16 @@ ReactDOM.createRoot(
 
       <AuthProvider>
 
-        <Toaster
-          position="top-right"
-          reverseOrder={false}
-        />
+        <NutritionProvider>
 
-        <App />
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+          />
+
+          <App />
+
+        </NutritionProvider>
 
       </AuthProvider>
 
