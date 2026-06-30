@@ -1,54 +1,76 @@
 import { useState } from "react";
-import { logMeal } from "../../api/nutritionApi";
+
+import toast from "react-hot-toast";
+
+import {
+  logMeal,
+} from "../../api/nutritionApi";
+
+import {
+  useNutrition,
+} from "../../context/NutritionContext";
 
 function MealLogger() {
 
-  const [meal, setMeal] =
-    useState("");
+  const {
+    refreshNutrition,
+    userId,
+  } = useNutrition();
 
-  const [loading, setLoading] =
-    useState(false);
+  const [
+    meal,
+    setMeal,
+  ] = useState("");
 
-  const [message, setMessage] =
-    useState("");
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
 
-  const userId =
-    "test-user";
+  async function handleSubmit() {
 
-  const handleSubmit =
-    async () => {
+    if (!meal.trim()) {
 
-      if (!meal) return;
+      toast.error(
+        "Enter a meal."
+      );
 
-      try {
+      return;
 
-        setLoading(true);
+    }
 
-        await logMeal(
-          userId,
-          meal
-        );
+    try {
 
-        setMessage(
-          "Meal logged successfully!"
-        );
+      setLoading(true);
 
-        setMeal("");
+      await logMeal(
+        userId,
+        meal
+      );
 
-      } catch (error) {
+      await refreshNutrition();
 
-        console.error(error);
+      toast.success(
+        "Meal Logged Successfully!"
+      );
 
-        setMessage(
-          "Failed to log meal"
-        );
+      setMeal("");
 
-      } finally {
+    } catch (error) {
 
-        setLoading(false);
+      console.error(error);
 
-      }
-    };
+      toast.error(
+        "Unable to log meal."
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  }
 
   return (
 
@@ -67,7 +89,7 @@ function MealLogger() {
         className="
         text-2xl
         font-bold
-        mb-4
+        mb-5
       "
       >
         Log Meal
@@ -80,15 +102,15 @@ function MealLogger() {
             e.target.value
           )
         }
-        placeholder="2 masala dosa"
+        placeholder="Example: 2 Masala Dosa"
         className="
           w-full
+          p-4
+          rounded-xl
           bg-black/30
           border
           border-white/10
-          rounded-xl
-          p-4
-          mb-4
+          mb-5
         "
       />
 
@@ -97,37 +119,31 @@ function MealLogger() {
         disabled={loading}
         className="
           w-full
-          bg-gradient-to-r
-          from-green-500
-          to-emerald-500
           py-3
           rounded-xl
+          bg-gradient-to-r
+          from-orange-500
+          to-pink-500
           font-semibold
         "
       >
+
         {
+
           loading
+
             ? "Logging..."
+
             : "Log Meal"
+
         }
+
       </button>
-
-      {message && (
-
-        <p
-          className="
-          mt-4
-          text-green-400
-        "
-        >
-          {message}
-        </p>
-
-      )}
 
     </div>
 
   );
+
 }
 
 export default MealLogger;
