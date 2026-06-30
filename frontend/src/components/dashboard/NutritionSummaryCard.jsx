@@ -1,123 +1,173 @@
-import useNutritionSummary from "../../hooks/useNutritionSummary";
+import {
+  Flame,
+  Beef,
+  Wheat,
+  Droplets,
+} from "lucide-react";
+
+import {
+  useNutrition,
+} from "../../context/NutritionContext";
 
 function NutritionSummaryCard() {
 
   const {
+
     summary,
+
     loading,
-  } = useNutritionSummary();
+
+  } = useNutrition();
 
   if (loading) {
+
     return (
-      <div className="
+
+      <div
+        className="
         bg-white/5
         border
         border-white/10
         rounded-3xl
-        p-6
-      ">
+        p-8
+      "
+      >
+
         Loading Nutrition...
+
       </div>
+
     );
+
   }
 
   return (
 
-    <div className="
+    <div
+      className="
       bg-white/5
       border
       border-white/10
       rounded-3xl
       p-6
       backdrop-blur-xl
-    ">
+    "
+    >
 
-      <h2 className="
-        text-xl
+      <h2
+        className="
+        text-2xl
         font-bold
         mb-6
-      ">
+      "
+      >
+
         Today's Nutrition
+
       </h2>
 
-      <div className="
-        grid
-        grid-cols-2
-        gap-4
-      ">
+      <div
+        className="
+        space-y-4
+      "
+      >
 
-        <div>
-          <p className="text-gray-400">
+        <div className="flex justify-between">
+
+          <div className="flex gap-3">
+
+            <Flame />
+
             Calories
-          </p>
 
-          <h3 className="
-            text-3xl
-            font-bold
-          ">
+          </div>
+
+          <b>
+
             {summary?.calories ?? 0}
-          </h3>
+
+          </b>
+
         </div>
 
-        <div>
-          <p className="text-gray-400">
-            Meals
-          </p>
+        <div className="flex justify-between">
 
-          <h3 className="
-            text-3xl
-            font-bold
-          ">
-            {summary?.meal_count ?? 0}
-          </h3>
-        </div>
+          <div className="flex gap-3">
 
-        <div>
-          <p className="text-gray-400">
+            <Beef />
+
             Protein
-          </p>
 
-          <h3 className="
-            text-green-400
-            text-2xl
-            font-bold
-          ">
-            {summary?.protein ?? 0}g
-          </h3>
+          </div>
+
+          <b>
+
+            {summary?.protein ?? 0} g
+
+          </b>
+
         </div>
 
-        <div>
-          <p className="text-gray-400">
+        <div className="flex justify-between">
+
+          <div className="flex gap-3">
+
+            <Wheat />
+
             Carbs
-          </p>
 
-          <h3 className="
-            text-yellow-400
-            text-2xl
-            font-bold
-          ">
-            {summary?.carbs ?? 0}g
-          </h3>
+          </div>
+
+          <b>
+
+            {summary?.carbs ?? 0} g
+
+          </b>
+
         </div>
 
-        <div>
-          <p className="text-gray-400">
-            Fat
-          </p>
+        <div className="flex justify-between">
 
-          <h3 className="
-            text-red-400
-            text-2xl
-            font-bold
-          ">
-            {summary?.fat ?? 0}g
-          </h3>
+          <div className="flex gap-3">
+
+            <Droplets />
+
+            Fat
+
+          </div>
+
+          <b>
+
+            {summary?.fat ?? 0} g
+
+          </b>
+
+        </div>
+
+        <hr className="border-white/10"/>
+
+        <div className="flex justify-between">
+
+          <span>
+
+            Meals Logged
+
+          </span>
+
+          <b>
+
+            {summary?.meal_count ?? 0}
+
+          </b>
+
         </div>
 
       </div>
 
     </div>
+
   );
+
 }
 
 export default NutritionSummaryCard;
