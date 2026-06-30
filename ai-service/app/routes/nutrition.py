@@ -14,6 +14,10 @@ from app.services.analytics_service import (
     get_weekly_summary,
 )
 
+from app.services.history_service import (
+    get_today_meals,
+)
+
 from app.models.nutrition_models import (
     MealAnalysisRequest,
     LogMealRequest,
@@ -98,6 +102,7 @@ async def log_meal(
 
         "fat":
             result["fat"]
+
     }
 
     save_meal(
@@ -131,5 +136,15 @@ async def weekly_summary(
 ):
 
     return get_weekly_summary(
+        user_id
+    )
+
+
+@router.get("/today-meals")
+async def today_meals(
+    user_id: str
+):
+
+    return get_today_meals(
         user_id
     )

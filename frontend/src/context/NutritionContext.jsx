@@ -7,6 +7,8 @@ import {
 
 import {
   getDailySummary,
+  getTodayMeals,
+  getWeeklySummary,
 } from "../api/nutritionApi";
 
 const NutritionContext =
@@ -28,6 +30,22 @@ export function NutritionProvider({
 
   const [
 
+    todayMeals,
+
+    setTodayMeals,
+
+  ] = useState([]);
+
+  const [
+
+    weeklySummary,
+
+    setWeeklySummary,
+
+  ] = useState([]);
+
+  const [
+
     loading,
 
     setLoading,
@@ -43,18 +61,46 @@ export function NutritionProvider({
 
       setLoading(true);
 
-      const data =
-        await getDailySummary(
+      const [
+
+        summaryData,
+
+        mealsData,
+
+        weeklyData,
+
+      ] = await Promise.all([
+
+        getDailySummary(
           userId
-        );
+        ),
+
+        getTodayMeals(
+          userId
+        ),
+
+        getWeeklySummary(
+          userId
+        ),
+
+      ]);
 
       setSummary(
-        data
+        summaryData
+      );
+
+      setTodayMeals(
+        mealsData
+      );
+
+      setWeeklySummary(
+        weeklyData
       );
 
     } catch (error) {
 
       console.error(
+        "Nutrition Error:",
         error
       );
 
@@ -96,6 +142,7 @@ export function NutritionProvider({
       const timer =
 
         setTimeout(
+
           async () => {
 
             await refreshNutrition();
@@ -103,7 +150,9 @@ export function NutritionProvider({
             scheduleRefresh();
 
           },
+
           milliseconds
+
         );
 
       return timer;
@@ -114,7 +163,6 @@ export function NutritionProvider({
       scheduleRefresh();
 
     return () =>
-
       clearTimeout(
         timer
       );
@@ -129,6 +177,10 @@ export function NutritionProvider({
 
         summary,
 
+        todayMeals,
+
+        weeklySummary,
+
         loading,
 
         refreshNutrition,
@@ -139,11 +191,7 @@ export function NutritionProvider({
 
     >
 
-      {
-
-        children
-
-      }
+      {children}
 
     </NutritionContext.Provider>
 

@@ -37,6 +37,23 @@ export const getWeeklySummary = async (
   return response.data;
 };
 
+export const getTodayMeals = async (
+  userId
+) => {
+
+  const response =
+    await axios.get(
+      `${API_BASE}/nutrition/today-meals`,
+      {
+        params: {
+          user_id: userId,
+        },
+      }
+    );
+
+  return response.data;
+};
+
 export const searchFood = async (
   food
 ) => {
